@@ -1,48 +1,29 @@
-terraform {
-    required_providers {
-      docker = {
-        source = "kreuzwerker/docker"
-        version = ">= 2.13.0"
-      }
-    }
-}
-
 locals {
   docker_container_name_0 = "tutorial_0"
   docker_container_name_1 = "tutorial_1"
 }
 
-provider "docker" {
-  host = "npipe:////.//pipe//docker_engine"
+module "local_nginx_container_0" {
+  source = "./modules/docker/local_container"
+  docker_container_name = local.docker_container_name_0
+  docker_image = var.nginx_image
+  external_container_port = var.external_container_port
+  internal_container_port = var.internal_container_port
 }
 
-# Pulls the image
-resource "docker_image" "nginx" {
-  name = var.nginx_image
+module "local_nginx_container_1" {
+  source = "./modules/docker/local_container"
+  docker_container_name = local.docker_container_name_1
+  docker_image = var.nginx_image
+  external_container_port = var.external_container_port + 1
+  internal_container_port = var.internal_container_port + 1
 }
 
-resource "docker_container" "nginx_container_0" {
-  image = docker_image.nginx.image_id
-  name  = local.docker_container_name_0
-  ports {
-    internal = var.internal_container_port
-    external = var.external_container_port
-  }
+
+output "container_id_0" {
+    value = module.local_nginx_container_0.local_container_id
 }
 
-resource "docker_container" "nginx_container_1" {
-  image = docker_image.nginx.image_id
-  name  = local.docker_container_name_1
-  ports {
-    internal = var.internal_container_port
-    external = var.external_container_port + 1
-  }
-}
-
-output "container_name_0" {
-    value = docker_container.nginx_container_0.name
-}
-
-output "container_name_1" {
-    value = docker_container.nginx_container_1.name  
+output "container_id_1" {
+    value = module.local_nginx_container_1.local_container_id
 }

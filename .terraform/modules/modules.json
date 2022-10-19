@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"local_nginx_container_1","Source":"./modules/docker/local_container","Dir":"modules/docker/local_container"},{"Key":"","Source":"","Dir":"."},{"Key":"local_nginx_container_0","Source":"./modules/docker/local_container","Dir":"modules/docker/local_container"}]}
