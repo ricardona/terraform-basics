@@ -17,3 +17,14 @@ variable "docker_container_name" {
   description = "Docker Container Name"
   type = string  
 }
+
+variable "container_pool_count" {
+  description = "Docker Container Pool Name"
+  type = number
+  default = 1
+
+  validation {
+    condition     = var.container_pool_count >= 0
+    error_message = "The count must be greater or equal to 0"
+  }
+}
